@@ -158,29 +158,29 @@
       border-radius: inherit;
       background: linear-gradient(110deg, #6B9FFF 0%, #C45FFF 100%);
       filter: blur(14px);
-      opacity: 0.30;          /* visible at rest — not zero */
+      opacity: 0.22;          /* visible at rest — not zero */
       z-index: -1;
-      transition: opacity 0.26s var(--ease), filter 0.26s var(--ease);
+      transition: opacity 0.30s var(--ease), filter 0.30s var(--ease);
     }
 
     /* ---- hover ---- */
     .btn--primary:hover,
     .btn--primary:focus-visible {
       background-position: 100% center;
-      transform: translateY(-3px) scale(1.04);
+      transform: translateY(-3px) scale(1.03);
       box-shadow:
         0  8px  28px  rgba(0,   0,   0,   0.50),
         0  2px   6px  rgba(0,   0,   0,   0.35),
-        0  0   48px   rgba(107, 159, 255, 0.65),
-        0  0   90px   rgba(196,  95, 255, 0.32),
+        0  0   44px   rgba(107, 159, 255, 0.60),
+        0  0   72px   rgba(196,  95, 255, 0.26),
         inset 0  1px 0 rgba(255, 255, 255, 0.32),
         inset 0 -1px 0 rgba(0,   0,   0,   0.16);
     }
 
     .btn--primary:hover::before,
     .btn--primary:focus-visible::before {
-      opacity: 0.65;
-      filter: blur(20px);
+      opacity: 0.52;
+      filter: blur(18px);
     }
 
     /* ---- active / press ---- */
@@ -217,7 +217,6 @@
     .section-header {
       text-align: center;
       margin-bottom: var(--space-xl);
-      padding-bottom: var(--space-sm);
     }
 
     .section-header__title {
@@ -344,8 +343,8 @@
     }
 
     @keyframes glowPulse {
-      0%   { opacity: 0.40; transform: scale(1);    }
-      100% { opacity: 0.65; transform: scale(1.12); }
+      0%   { opacity: 0.35; transform: scale(1);    }
+      100% { opacity: 0.52; transform: scale(1.10); }
     }
 
     /* Floating pixels */
@@ -437,16 +436,16 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      background: rgba(91, 138, 255, 0.07);
-      border: 1px solid rgba(91, 138, 255, 0.22);
+      background: rgba(91, 138, 255, 0.06);
+      border: 1px solid rgba(91, 138, 255, 0.20);
       border-radius: var(--radius-full);
-      padding: 0.65rem 1.5rem;
-      font-size: 0.85rem;
+      padding: 0.6rem 1.4rem;
+      font-size: 0.84rem;
       font-weight: 500;
       letter-spacing: 0.01em;
       color: var(--clr-text-muted);
-      /* Increased gap pushes the CTA button into isolated visual space */
-      margin-bottom: 2.25rem;
+      /* Breathing room pushes CTA into isolated visual space */
+      margin-bottom: 2rem;
       animation: fadeUp 0.9s 0.24s var(--ease-out) both;
     }
 
@@ -506,15 +505,10 @@
       font-size: 1.075rem;
     }
 
-    /* Form submit — full-width, clear separation from last field */
-    .quote__form > .btn--primary {
-      margin-top: 0.5rem;
-      padding: 1rem 2rem;
-      font-size: 1rem;
-    }
+    /* Form submit — full-width; sizing/spacing set in quote section block */
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(28px); }
+      from { opacity: 0; transform: translateY(22px); }
       to   { opacity: 1; transform: translateY(0);    }
     }
 
@@ -592,7 +586,7 @@
     }
 
     .service-card:hover {
-      transform: translateY(-7px);
+      transform: translateY(-6px);
       border-color: rgba(91, 138, 255, 0.38);
       box-shadow:
         0 20px 56px  rgba(0, 0, 0, 0.55),
@@ -745,11 +739,11 @@
     .why-us__list {
       display: flex;
       flex-direction: column;
-      gap: 1.35rem;
+      gap: 1.2rem;
       /* Extra bottom margin creates deliberate pause before CTA */
-      margin-bottom: 3.5rem;
+      margin-bottom: 3rem;
       padding-bottom: 1rem;
-      border-bottom: 1px solid rgba(91, 138, 255, 0.10);
+      border-bottom: 1px solid rgba(91, 138, 255, 0.08);
     }
 
     .why-us__list-item {
@@ -854,7 +848,7 @@
     }
 
     .why-us__visual-stat-number {
-      font-size: 2.6rem;
+      font-size: 2.4rem;
       font-weight: 900;
       letter-spacing: -0.05em;
       background: var(--grad-text);
@@ -1189,15 +1183,15 @@
     .quote__subtitle {
       font-size: 1rem;
       color: var(--clr-text-muted);
-      margin-bottom: 2.75rem;
-      line-height: 1.9;
+      margin-bottom: 2.5rem;
+      line-height: 1.8;
       letter-spacing: 0.005em;
     }
 
     .quote__reassurances {
       display: flex;
       flex-direction: column;
-      gap: 1.1rem;
+      gap: 1rem;
     }
 
     .quote__reassurance-item {
@@ -1262,7 +1256,7 @@
     .form-group {
       display: flex;
       flex-direction: column;
-      gap: 0.55rem;
+      gap: 0.45rem;
     }
 
     .form-label {
@@ -1313,16 +1307,18 @@
     .form-disclaimer {
       font-size: 0.78rem;
       font-weight: 400;
-      color: var(--clr-text-dim);
+      color: var(--clr-text-muted);
       text-align: center;
       /* Tight below button so it reads as a caption, not competing copy */
       margin-top: 0.6rem;
       letter-spacing: 0.01em;
     }
 
-    /* Extra top margin isolates submit from the field stack */
+    /* Submit — isolated from field stack; compact but not small */
     .quote__form > .btn--primary {
       margin-top: 0.75rem;
+      padding: 1.05rem 2rem;
+      font-size: 1rem;
     }
 
     /* Hairline rule above submit — rendered as a box-shadow so no layout shift */
@@ -1460,10 +1456,10 @@
     ============================================================ */
     .reveal {
       opacity: 0;
-      transform: translateY(32px);
+      transform: translateY(22px);
       transition:
-        opacity 0.7s var(--ease-out),
-        transform 0.7s var(--ease-out);
+        opacity 0.65s var(--ease-out),
+        transform 0.65s var(--ease-out);
     }
 
     .reveal.visible {
@@ -1474,10 +1470,10 @@
     /* Stagger children */
     .reveal-child > * {
       opacity: 0;
-      transform: translateY(24px);
+      transform: translateY(16px);
       transition:
-        opacity 0.6s var(--ease-out),
-        transform 0.6s var(--ease-out);
+        opacity 0.55s var(--ease-out),
+        transform 0.55s var(--ease-out);
     }
 
     .reveal-child.visible > *:nth-child(1) { opacity: 1; transform: none; transition-delay: 0s;    }
@@ -1989,7 +1985,7 @@
         height:100%;
         pointer-events:none;
         z-index:0;
-        opacity:0.55;
+        opacity:0.45;
       `;
       hero.querySelector('.hero__bg-animation').appendChild(canvas);
 
@@ -2008,11 +2004,11 @@
           this.r  = Math.random() * 1.8 + 0.5;
           this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
           this.alpha = 0;
-          this.targetAlpha = Math.random() * 0.6 + 0.2;
-          this.vy = -(Math.random() * 0.35 + 0.12);
-          this.vx = (Math.random() - 0.5) * 0.18;
+          this.targetAlpha = Math.random() * 0.5 + 0.18;
+          this.vy = -(Math.random() * 0.28 + 0.10);
+          this.vx = (Math.random() - 0.5) * 0.14;
           this.life = 0;
-          this.maxLife = Math.random() * 280 + 160;
+          this.maxLife = Math.random() * 300 + 180;
           if (init) this.life = Math.random() * this.maxLife;
         }
 
@@ -2100,13 +2096,13 @@
           const cy = rect.top  + rect.height / 2;
           const dx = (e.clientX - cx) / (rect.width  / 2);
           const dy = (e.clientY - cy) / (rect.height / 2);
-          btn.style.transform = `translate(${dx * 5}px, ${dy * 3}px) scale(1.03)`;
+          btn.style.transform = `translate(${dx * 4}px, ${dy * 2.5}px) scale(1.03)`;
         });
 
         btn.addEventListener('mouseleave', () => {
           btn.style.transform = '';
-          btn.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s';
-          setTimeout(() => { btn.style.transition = ''; }, 400);
+          btn.style.transition = 'transform 0.38s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s';
+          setTimeout(() => { btn.style.transition = ''; }, 380);
         });
       });
 
