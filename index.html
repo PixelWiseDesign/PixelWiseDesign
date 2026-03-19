@@ -1519,5 +1519,267 @@
       </div>
     </footer>
 
+  <script>
+    (() => {
+      'use strict';
+
+      /* ============================================================
+         1. SMOOTH SCROLLING — anchor links
+      ============================================================ */
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', e => {
+          const id = link.getAttribute('href');
+          if (id === '#') return;
+          const target = document.querySelector(id);
+          if (!target) return;
+          e.preventDefault();
+          const navH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-h'), 10) || 72;
+          const top = target.getBoundingClientRect().top + window.scrollY - navH;
+          window.scrollTo({ top, behavior: 'smooth' });
+        });
+      });
+
+      /* ============================================================
+         2. STICKY NAVBAR — shrink + shadow on scroll
+      ============================================================ */
+      const navbar = document.getElementById('navbar');
+
+      const handleNavScroll = () => {
+        if (window.scrollY > 40) {
+          navbar.classList.add('scrolled');
+          navbar.style.setProperty('--nav-h', '60px');
+        } else {
+          navbar.classList.remove('scrolled');
+          navbar.style.setProperty('--nav-h', '72px');
+        }
+      };
+
+      window.addEventListener('scroll', handleNavScroll, { passive: true });
+
+      /* ============================================================
+         3. SCROLL REVEAL — IntersectionObserver
+      ============================================================ */
+      const revealObserver = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -48px 0px' }
+      );
+
+      // Tag elements for reveal
+      const revealSelectors = [
+        '.section-header',
+        '.service-card',
+        '.why-us__text',
+        '.why-us__visual',
+        '.process__step',
+        '.cta-banner__content',
+        '.quote__intro',
+        '.quote__form-wrap',
+        '.footer__inner',
+      ];
+
+      revealSelectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach((el, i) => {
+          el.classList.add('reveal');
+          // Stagger siblings within the same parent
+          el.style.transitionDelay = `${i * 0.08}s`;
+          revealObserver.observe(el);
+        });
+      });
+
+      /* ============================================================
+         4. CANVAS PARTICLE BACKGROUND — hero section
+      ============================================================ */
+      const hero = document.getElementById('hero');
+
+      const canvas = document.createElement('canvas');
+      canvas.setAttribute('aria-hidden', 'true');
+      canvas.style.cssText = `
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+        pointer-events:none;
+        z-index:0;
+        opacity:0.55;
+      `;
+      hero.querySelector('.hero__bg-animation').appendChild(canvas);
+
+      const ctx = canvas.getContext('2d');
+      let W, H, particles, raf;
+
+      const PARTICLE_COUNT = 55;
+      const COLORS = ['#4f7cff', '#9b5cff', '#7fa8ff', '#c084fc', '#a5c4ff'];
+
+      class Particle {
+        constructor() { this.reset(true); }
+
+        reset(init = false) {
+          this.x  = Math.random() * W;
+          this.y  = init ? Math.random() * H : H + 10;
+          this.r  = Math.random() * 1.8 + 0.5;
+          this.color = COLORS[Math.floor(Math.random() * COLORS.length)];
+          this.alpha = 0;
+          this.targetAlpha = Math.random() * 0.6 + 0.2;
+          this.vy = -(Math.random() * 0.35 + 0.12);
+          this.vx = (Math.random() - 0.5) * 0.18;
+          this.life = 0;
+          this.maxLife = Math.random() * 280 + 160;
+          if (init) this.life = Math.random() * this.maxLife;
+        }
+
+        update() {
+          this.life++;
+          this.x += this.vx;
+          this.y += this.vy;
+
+          // Fade in/out
+          const progress = this.life / this.maxLife;
+          if (progress < 0.15) {
+            this.alpha = (progress / 0.15) * this.targetAlpha;
+          } else if (progress > 0.75) {
+            this.alpha = ((1 - progress) / 0.25) * this.targetAlpha;
+          } else {
+            this.alpha = this.targetAlpha;
+          }
+
+          if (this.life >= this.maxLife) this.reset();
+        }
+
+        draw() {
+          ctx.save();
+          ctx.globalAlpha = this.alpha;
+          ctx.shadowColor  = this.color;
+          ctx.shadowBlur   = this.r * 6;
+          ctx.fillStyle    = this.color;
+          ctx.beginPath();
+          // Alternate squares vs circles for "pixel" feel
+          if (this.r > 1.4) {
+            const s = this.r * 1.8;
+            ctx.fillRect(this.x - s / 2, this.y - s / 2, s, s);
+          } else {
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      }
+
+      function initCanvas() {
+        W = canvas.width  = hero.offsetWidth;
+        H = canvas.height = hero.offsetHeight;
+        particles = Array.from({ length: PARTICLE_COUNT }, () => new Particle());
+      }
+
+      function tick() {
+        ctx.clearRect(0, 0, W, H);
+        particles.forEach(p => { p.update(); p.draw(); });
+        raf = requestAnimationFrame(tick);
+      }
+
+      // Pause when hero is off-screen (perf)
+      const heroObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            raf = requestAnimationFrame(tick);
+          } else {
+            cancelAnimationFrame(raf);
+          }
+        },
+        { threshold: 0 }
+      );
+
+      initCanvas();
+      heroObserver.observe(hero);
+      tick();
+
+      // Resize
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          initCanvas();
+        }, 120);
+      }, { passive: true });
+
+      /* ============================================================
+         5. BUTTON MAGNETIC HOVER EFFECT
+      ============================================================ */
+      document.querySelectorAll('.btn--primary').forEach(btn => {
+        btn.addEventListener('mousemove', e => {
+          const rect = btn.getBoundingClientRect();
+          const cx = rect.left + rect.width  / 2;
+          const cy = rect.top  + rect.height / 2;
+          const dx = (e.clientX - cx) / (rect.width  / 2);
+          const dy = (e.clientY - cy) / (rect.height / 2);
+          btn.style.transform = `translate(${dx * 5}px, ${dy * 3}px) scale(1.03)`;
+        });
+
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = '';
+          btn.style.transition = 'transform 0.4s cubic-bezier(0.4,0,0.2,1), box-shadow 0.22s';
+          setTimeout(() => { btn.style.transition = ''; }, 400);
+        });
+      });
+
+      /* ============================================================
+         6. QUOTE FORM — submission handler
+      ============================================================ */
+      const form    = document.getElementById('quoteForm');
+      const success = document.getElementById('quoteSuccess');
+
+      if (form && success) {
+        form.addEventListener('submit', e => {
+          e.preventDefault();
+
+          // Basic validation
+          const inputs = form.querySelectorAll('[required]');
+          let valid = true;
+
+          inputs.forEach(input => {
+            input.style.borderColor = '';
+            if (!input.value.trim()) {
+              input.style.borderColor = '#ff4f7b';
+              valid = false;
+            }
+          });
+
+          if (!valid) {
+            const first = form.querySelector('[required]:invalid, [style*="ff4f7b"]');
+            if (first) first.focus();
+            return;
+          }
+
+          // Animate out form, animate in success
+          form.style.cssText = 'opacity:0;transform:translateY(12px);transition:opacity 0.35s,transform 0.35s;pointer-events:none;';
+          setTimeout(() => {
+            form.hidden = true;
+            form.style.cssText = '';
+            success.hidden = false;
+            success.style.cssText = 'opacity:0;transform:translateY(16px);';
+            requestAnimationFrame(() => {
+              success.style.cssText = 'opacity:0;transform:translateY(16px);transition:opacity 0.45s,transform 0.45s;';
+              requestAnimationFrame(() => {
+                success.style.cssText = 'opacity:1;transform:translateY(0);transition:opacity 0.45s,transform 0.45s;';
+              });
+            });
+          }, 370);
+        });
+      }
+
+      /* ============================================================
+         7. COPYRIGHT YEAR
+      ============================================================ */
+      const yearEl = document.getElementById('currentYear');
+      if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+    })();
+  </script>
   </body>
 </html>
