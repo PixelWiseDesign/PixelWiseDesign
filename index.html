@@ -1060,6 +1060,7 @@
     ============================================================ */
     .cta-banner {
       padding-block: var(--space-3xl);
+      padding-bottom: calc(var(--space-3xl) + 2.5rem);
       background:
         radial-gradient(ellipse 90% 60% at 50% 50%, rgba(91, 138, 255, 0.09) 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 50% 50%, rgba(168, 85, 247, 0.07) 0%, transparent 65%),
@@ -1121,18 +1122,43 @@
     ============================================================ */
     .quote {
       padding-block: var(--space-3xl);
+      padding-bottom: calc(var(--space-3xl) + 2rem);
       background:
-        radial-gradient(ellipse 55% 45% at 0%   50%, rgba(91, 138, 255, 0.07) 0%, transparent 65%),
-        radial-gradient(ellipse 55% 45% at 100% 50%, rgba(168, 85, 247, 0.07) 0%, transparent 65%),
-        linear-gradient(180deg, var(--clr-bg) 0%, var(--clr-bg-2) 8%, var(--clr-bg-2) 92%, var(--clr-bg) 100%);
+        /* Top entry bloom — pulls the eye in from above */
+        radial-gradient(ellipse 70% 35% at 50%   0%,   rgba(91, 138, 255, 0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 45% at 0%   55%, rgba(91, 138, 255, 0.06) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 100% 55%, rgba(168, 85, 247, 0.06) 0%, transparent 65%),
+        linear-gradient(180deg, var(--clr-bg) 0%, var(--clr-bg-2) 6%, var(--clr-bg-2) 94%, var(--clr-bg) 100%);
       position: relative;
     }
 
+    /* Gradient border along the top edge — visual entry signal */
     .quote::before {
       content: '';
       position: absolute;
-      inset: 0;
-      background: none;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent             0%,
+        rgba(91, 138, 255, 0.5) 25%,
+        rgba(168, 85, 247, 0.6) 50%,
+        rgba(91, 138, 255, 0.5) 75%,
+        transparent             100%
+      );
+      pointer-events: none;
+    }
+
+    /* Faint downward arrow-shaped glow just above the section */
+    .quote::after {
+      content: '';
+      position: absolute;
+      top: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      height: 48px;
+      background: linear-gradient(to bottom, transparent, rgba(91, 138, 255, 0.45));
       pointer-events: none;
     }
 
@@ -1143,6 +1169,11 @@
       align-items: start;
       position: relative;
       z-index: 1;
+    }
+
+    /* Left-column intro — slight downward offset aligns it with the form card top */
+    .quote__intro {
+      padding-top: 1.25rem;
     }
 
     .quote__title {
@@ -1193,30 +1224,33 @@
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
     }
 
-    /* Form wrap */
+    /* Form wrap — elevated destination card */
     .quote__form-wrap {
       background:
         linear-gradient(145deg, rgba(255,255,255,0.025) 0%, transparent 50%),
         linear-gradient(160deg, #090f20 0%, #0c1430 100%);
-      border: 1px solid rgba(91, 138, 255, 0.18);
+      border: 1px solid rgba(91, 138, 255, 0.24);
       border-radius: var(--radius-lg);
       padding: 3rem;
       box-shadow:
-        0 4px 28px  rgba(0, 0, 0, 0.40),
-        0 1px 4px   rgba(0, 0, 0, 0.24),
-        0 0 0 1px   rgba(168, 85, 247, 0.06),
-        inset 0 1px 0 rgba(255,255,255,0.04);
+        0 6px 40px  rgba(0, 0, 0, 0.50),
+        0 2px 8px   rgba(0, 0, 0, 0.30),
+        0 0 0 1px   rgba(168, 85, 247, 0.09),
+        0 0 60px    rgba(91, 138, 255, 0.08),
+        0 0 24px    rgba(168, 85, 247, 0.06),
+        inset 0 1px 0 rgba(255,255,255,0.06);
       transition: box-shadow 0.30s var(--ease), border-color 0.30s var(--ease);
     }
 
     .quote__form-wrap:focus-within {
-      border-color: rgba(91, 138, 255, 0.28);
+      border-color: rgba(91, 138, 255, 0.38);
       box-shadow:
-        0 8px 40px  rgba(0, 0, 0, 0.48),
-        0 2px 8px   rgba(0, 0, 0, 0.28),
-        0 0 0 1px   rgba(91, 138, 255, 0.12),
-        0 0  28px   rgba(91, 138, 255, 0.06),
-        inset 0 1px 0 rgba(255,255,255,0.05);
+        0 10px 52px  rgba(0, 0, 0, 0.55),
+        0 3px 10px   rgba(0, 0, 0, 0.32),
+        0 0 0 1px    rgba(91, 138, 255, 0.16),
+        0 0 80px     rgba(91, 138, 255, 0.12),
+        0 0 36px     rgba(168, 85, 247, 0.08),
+        inset 0 1px 0 rgba(255,255,255,0.07);
     }
 
     .quote__form {
