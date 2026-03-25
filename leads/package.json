@@ -1,0 +1,14 @@
+{
+  "name": "med-spa-leads",
+  "version": "1.0.0",
+  "description": "Multi-source med spa lead scraper using Apify",
+  "main": "pull-leads.js",
+  "scripts": {
+    "start": "node pull-leads.js",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "apify-client": "^2.9.3",
+    "csv-writer": "^1.6.0"
+  }
+}
